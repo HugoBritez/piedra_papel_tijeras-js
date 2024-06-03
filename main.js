@@ -55,10 +55,10 @@ function playRound() {
 }
 
 
-while(rounds<=5){
-    playRound();
-    rounds++
-}
+//*while(rounds<=5){
+//    playRound();
+//    rounds++
+//}
 
 console.log('\nJuego terminado');
 if (puntosJugador > puntosComputadora) {
