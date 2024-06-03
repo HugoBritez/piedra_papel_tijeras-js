@@ -5,66 +5,75 @@ let puntosComputadora = 0;
 let rounds = 1;
 
 function getComputerChoice() {
-  const choice = Math.floor(Math.random() * 3);
-  if (choice === 0) {
-    return 'piedra';
-  } else if (choice === 1) {
-    return 'papel';
-  } else {
-    return 'tijeras';
-  }
+    const choice = Math.floor(Math.random() * 3);
+    if (choice === 0) {
+        return 'piedra';
+    } else if (choice === 1) {
+        return 'papel';
+    } else {
+        return 'tijeras';
+    }
 }
 
-function getJugadorChoice() {
-  let jugada = prompt('Elige piedra, papel o tijeras:');
-  let jugadaLowerCase = jugada.toLowerCase();
-  return jugadaLowerCase;
+function playRound(playerSelection) {
+    let computerChoice = getComputerChoice();
+    console.log(`Jugador elige: ${playerSelection}`);
+    console.log(`Computadora elige: ${computerChoice}`);
+    
+    let resultMessage = '';
+    if (playerSelection === computerChoice) {
+        resultMessage = '¡Ha habido un empate!';
+    } else if (playerSelection === 'piedra' && computerChoice === 'papel' ||
+               playerSelection === 'papel' && computerChoice === 'tijeras' ||
+               playerSelection === 'tijeras' && computerChoice === 'piedra') {
+        puntosComputadora++;
+        resultMessage = 'Computadora gana esta ronda!';
+    } else if (playerSelection === 'piedra' && computerChoice === 'tijeras' ||
+               playerSelection === 'papel' && computerChoice === 'piedra' ||
+               playerSelection === 'tijeras' && computerChoice === 'papel') {
+        puntosJugador++;
+        resultMessage = 'Jugador gana esta ronda!';
+    } else {
+        resultMessage = 'Elección no válida. Por favor, elige piedra, papel o tijeras.';
+    }
+    
+    console.log(resultMessage);
+    console.log(`Puntuación: Jugador ${puntosJugador} - Computadora ${puntosComputadora}`);
+
+    document.getElementById('result').textContent = resultMessage;
+    document.getElementById('score').textContent = `Puntuación: Jugador ${puntosJugador} - Computadora ${puntosComputadora}`;
+
+    rounds++;
+    if (rounds > 5) {
+        endGame();
+    }
 }
 
-function playRound() {
-  let jugadorChoice = getJugadorChoice();
-  let computerChoice = getComputerChoice();
-  console.log(`Jugador elige: ${jugadorChoice}`);
-  console.log(`Computadora elige: ${computerChoice}`);
-  
-  if (jugadorChoice === computerChoice) {
-    console.log('¡Ha habido un empate!');
-  } else if (jugadorChoice === 'piedra' && computerChoice === 'papel') {
-    puntosComputadora++;
-    console.log('Computadora gana esta ronda!');
-  } else if (jugadorChoice === 'piedra' && computerChoice === 'tijeras') {
-    puntosJugador++;
-    console.log('Jugador gana esta ronda!');
-  } else if (jugadorChoice === 'papel' && computerChoice === 'tijeras') {
-    puntosComputadora++;
-    console.log('Computadora gana esta ronda!');
-  } else if (jugadorChoice === 'papel' && computerChoice === 'piedra') {
-    puntosJugador++;
-    console.log('Jugador gana esta ronda!');
-  } else if (jugadorChoice === 'tijeras' && computerChoice === 'piedra') {
-    puntosComputadora++;
-    console.log('Computadora gana esta ronda!');
-  } else if (jugadorChoice === 'tijeras' && computerChoice === 'papel') {
-    puntosJugador++;
-    console.log('Jugador gana esta ronda!');
-  } else {
-    console.log('Elección no válida. Por favor, elige piedra, papel o tijeras.');
-  }
-  
-  console.log(`Puntuación: Jugador ${puntosJugador} - Computadora ${puntosComputadora}`);
+function endGame() {
+    let finalMessage = '\nJuego terminado\n';
+    if (puntosJugador > puntosComputadora) {
+        finalMessage += '¡Jugador gana el juego!';
+    } else if (puntosJugador < puntosComputadora) {
+        finalMessage += 'Computadora gana el juego!';
+    } else {
+        finalMessage += '¡El juego ha terminado en empate!';
+    }
+    console.log(finalMessage);
+    document.getElementById('result').textContent = finalMessage;
+
+    // Disable buttons after the game ends
+    document.getElementById('piedra').disabled = true;
+    document.getElementById('papel').disabled = true;
+    document.getElementById('tijeras').disabled = true;
 }
 
-
-//*while(rounds<=5){
-//    playRound();
-//    rounds++
-//}
-
-console.log('\nJuego terminado');
-if (puntosJugador > puntosComputadora) {
-  console.log('¡Jugador gana el juego!');
-} else if (puntosJugador < puntosComputadora) {
-  console.log('Computadora gana el juego!');
-} else {
-  console.log('¡El juego ha terminado en empate!');
-}
+// Add event listeners to the buttons
+document.getElementById('piedra').addEventListener('click', function() {
+    playRound('piedra');
+});
+document.getElementById('papel').addEventListener('click', function() {
+    playRound('papel');
+});
+document.getElementById('tijeras').addEventListener('click', function() {
+    playRound('tijeras');
+});
